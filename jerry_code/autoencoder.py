@@ -126,3 +126,27 @@ class Autoencoder:
 
     def save_weights(self, file_path):
         self._model.save_weights(file_path)
+
+    @staticmethod
+    def get_classification(vals, y_data):
+        """
+        :param vals: single float value from model for each data point
+        :param y_data: data for correct label values (we need this to determine events)
+        :return: classification results
+        """
+        if len(vals) != len(y_data):
+            raise ValueError(f"Length of input values ({len(vals)}) not equal to length of labels ({len(y_data)})!")
+        split_idxs = np.where(y_data == 1)[0]
+        # We discard the first element of the split as it is the empty array
+        event_vals = np.split(vals, split_idxs)[1:]
+        event_labels = np.split(y_data, split_idxs)[1:]
+        predictions = []
+        N_events = len(event_vals)
+        for i in range(N_events):
+            cur_vals = event_vals[i]
+            cur_predict = np.zeros(len(cur_vals))
+            hs_idx = np.argmax(cur_vals)
+            cur_predict[hs_idx] = 1
+            predictions.append(cur_predict)
+        prediction_arr = np.concatenate(predictions)
+        return prediction_arr

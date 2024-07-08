@@ -1,6 +1,7 @@
 """
 Functions for loading data
 I put all data files in batches (of currently 500 events) and load each batch
+All data batches specified by prefix and batch number
 """
 
 import numpy as np
