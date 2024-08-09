@@ -1,4 +1,3 @@
-
 #define myEvent_display_cxx
 #include "myEvent_display.h"
 #include <TROOT.h>
@@ -57,71 +56,6 @@ TString save_Evt_info = "Event_display_plots/Evt_no_";
 struct Color {
     int r, g, b;
 };
-
-// Function to get the color based on Z value
-Color GetColor(float Z, float reco_Z) {
-    // Define the Z value ranges based on reco_Z
-    float Z_ranges[] = {
-        static_cast<float>(reco_Z - 2.0),
-        static_cast<float>(reco_Z - 1.8),
-        static_cast<float>(reco_Z - 1.6),
-        static_cast<float>(reco_Z - 1.4),
-        static_cast<float>(reco_Z - 1.2),
-        static_cast<float>(reco_Z - 1.0),
-        static_cast<float>(reco_Z - 0.8),
-        static_cast<float>(reco_Z - 0.6),
-        static_cast<float>(reco_Z - 0.4),
-        static_cast<float>(reco_Z - 0.2),
-        static_cast<float>(reco_Z),
-        static_cast<float>(reco_Z + 0.2),
-        static_cast<float>(reco_Z + 0.4),
-        static_cast<float>(reco_Z + 0.6),
-        static_cast<float>(reco_Z + 0.8),
-        static_cast<float>(reco_Z + 1.0),
-        static_cast<float>(reco_Z + 1.2),
-        static_cast<float>(reco_Z + 1.4),
-        static_cast<float>(reco_Z + 1.6),
-        static_cast<float>(reco_Z + 1.8),
-        static_cast<float>(reco_Z + 2.0)
-    };
-
-    // Define the colors
-    Color colors[] = {
-        {255, 165, 0},    // Orange
-        {255, 255, 0},    // Yellow
-        {0, 128, 0},      // Green
-        {255, 20, 147},   // Pink
-        {210, 180, 140},  // Tan
-        {128, 0, 128},    // Purple
-        {0, 255, 255},    // Cyan
-        {160, 32, 240},   // Purple (different shade)
-        {255, 215, 0},    // Gold
-        {0, 0, 0},        // Black
-        {0, 128, 128},    // Teal
-        {128, 128, 128},  // Gray
-        {255, 192, 203},  // Pink (light)
-        {255, 99, 71},    // Tomato
-        {173, 255, 47},   // Green Yellow
-        {0, 255, 0},      // Lime
-        {255, 0, 255},    // Magenta
-        {255, 165, 79},   // Peach
-        {0, 255, 127},    // Spring Green
-        {255, 228, 196},  // Bisque
-        {255, 222, 173}   // Navajo White
-    };
-
-    // Determine the appropriate color index based on Z
-    int color_index = 0;
-    for (int i = 0; i < sizeof(Z_ranges) / sizeof(Z_ranges[0]); ++i) {
-        if (Z <= Z_ranges[i]) {
-            color_index = i;
-            break;
-        }
-    }
-
-    // Return the corresponding color
-    return colors[color_index];
-}
 
 double getNewDzpara( float ETA, float PT)
 {
@@ -530,7 +464,7 @@ void myEvent_display::DisplayZRho(int event, int vtxID, bool drawHGTD, int TrkSe
     float x = (pt/2)*cos(theta)*signX;
     float y = (pt/2)*sin(theta)*signY;
 
-    /*
+    
     
     TLine* l;
     //l = new TLine(z0+z,0, (z0+z+pz/3.),rho/3.);
@@ -548,7 +482,7 @@ void myEvent_display::DisplayZRho(int event, int vtxID, bool drawHGTD, int TrkSe
   //  }
       
       
-    */ //added this 28th match
+     //added this 28th match
    
   }
 
@@ -556,7 +490,7 @@ void myEvent_display::DisplayZRho(int event, int vtxID, bool drawHGTD, int TrkSe
   cout << "Vertex MET = " << MET << endl;
   
 
-  
+ 
   //draw other RECO vertices
   //-------------------------------
   for(int i=0; i< recovertex_z->size(); i++) {
@@ -630,13 +564,8 @@ void myEvent_display::DisplayZRho(int event, int vtxID, bool drawHGTD, int TrkSe
         
             TLine* l;
             l = new TLine(Z+z0,0, Z+z0+x,y);
-                        
-            Color color = GetColor(Z, recovertex_z->at(vtxID));
-            Color_t lineColor = TColor::GetColor(color.r, color.g, color.b);
-            l->SetLineColor(lineColor);
-
             
-            l->Draw("same");
+            //l->Draw("same");
             
 
           }
@@ -711,31 +640,7 @@ void myEvent_display::DisplayZRho(int event, int vtxID, bool drawHGTD, int TrkSe
     leg2->SetTextSize(0.04);
     leg2->AddEntry(ll1,"HS Tracks");
     leg2->AddEntry(ll2,"PU Tracks");
-    /*
-    // Add legend entries for each unique Z value
-    for (float zValue : uniqueZValues) {
-        char entryLabel[100];
-        sprintf(entryLabel, "PU track with Z=%.2f", zValue);
-        leg2->AddEntry((TObject*)nullptr, entryLabel, ""); // Add an empty entry to the legend
-        // Set legend line color based on custom color mapping
-        Color_t legendLineColor = GetLineColor(zValue);
-        leg2->SetLineColor(legendLineColor);
-    }
-    */
-    for (float zValue : uniqueZValues) {
-        char entryLabel[100];
-        //sprintf(entryLabel, "PU tracks from reco Z=%.2f", zValue);
-        sprintf(entryLabel, "PU tracks from truth Z=%.2f", zValue);
-        // Create a line with the desired line color and add it to the legend
-        TLine* legendLine = new TLine(0, 0, 1, 1); // Create a line object
-        
-        Color line_color = GetColor(zValue, recovertex_z->at(vtxID));
-        Color_t legendLineColor = TColor::GetColor(line_color.r, line_color.g, line_color.b);
-        //Color_t legendLineColor = GetLineColor(zValue); // Get custom color mapping
-        legendLine->SetLineColor(legendLineColor); // Set line color
-        
-        leg2->AddEntry(legendLine, entryLabel, "l"); // Add the line to the legend with the label and line style
-    }
+
     //leg2->AddEntry(ll2,"PU tracks");
     //leg2->AddEntry(ll3,"HS tracks from PU vertx");
     leg2->Draw();
