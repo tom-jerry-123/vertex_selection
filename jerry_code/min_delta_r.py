@@ -1,9 +1,12 @@
 """
 Computations for min dr features here
+Some testing code at the bottom
+Fill in path to root file (ROOT_PATH) to run code
 """
 
 
 import numpy as np
+import uproot
 
 
 def compute_track_eta(tree, event_range):
@@ -106,3 +109,10 @@ def read_features_to_csv(tree, out_path, n_tracks, event_range):
 
     np.savetxt(out_path, final_data, delimiter=',', fmt='%s')
     print(f"Successfully saved data batch to '{out_path}'")
+
+
+if __name__ == "__main__":
+    ROOT_PATH = ""
+    with uproot.open(ROOT_PATH) as file:
+        tree = file["EventTree;1"]
+    compute_delta_R(tree, (0, 100))
