@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import math
 
-root_file = uproot.open('../tt_hist-Rel21_19files.root')
+root_file = uproot.open('tt_hist-Rel21_19files.root')
 tree = root_file["EventTree"]
 
 # Get the branches of interest
