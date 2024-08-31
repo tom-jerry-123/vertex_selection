@@ -54,3 +54,34 @@ def plot_err_vs_pt2(err_lst, pt_lst, labels=None):
     plt.tick_params(axis='both', which='major', labelsize=16)
     plt.legend(fontsize=18)
     plt.show()
+
+
+def line_plot(x_data_lst, y_data_lst, y_err_lst=None, labels=None, title="", xlabel="", ylabel="", ylim=None):
+    colors = ['blue', 'green', 'red', 'orange']
+
+    if len(x_data_lst) != len(y_data_lst):
+        raise ValueError("Length of x / y inputs don't match")
+    if len(x_data_lst) > len(colors):
+        raise RuntimeError("More datasets than there are colors! This plot is too busy.")
+    if labels is not None and len(x_data_lst) != len(labels):
+        labels = None
+        raise RuntimeWarning("Number of labels not the same as number of datasets to plot. Setting labels to NONE.")
+    if y_err_lst is not None and len(x_data_lst) != len(y_err_lst):
+        y_err_lst = None
+        raise RuntimeWarning("Number of error-value sets not equal to number of datasets. Setting error list to NONE.")
+
+    for i in range(len(x_data_lst)):
+        data_label = f"Dataset {i}" if labels is None else labels[i]
+        y_err = [0 for i in range(len(y_data_lst[i]))] if y_err_lst is None else y_err_lst[i]
+        plt.plot(x_data_lst[i], y_data_lst[i], color=colors[i], marker='o', markersize=2, linestyle='-', alpha=0.5, label=data_label)
+        # Create scatter plot with error bars
+        # plt.errorbar(x_data_lst[i], y_data_lst[i], yerr=y_err, fmt='o', color=colors[i], label=data_label)
+
+    plt.xlabel(xlabel, fontsize=18)
+    plt.ylabel(ylabel, fontsize=18)
+    plt.tick_params(axis='both', which='major', labelsize=16)
+    plt.title(title, fontsize=24)
+    plt.legend()
+    if ylim is not None:
+        plt.ylim(ylim[0], ylim[1])
+    plt.show()

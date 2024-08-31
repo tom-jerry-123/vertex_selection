@@ -1,6 +1,7 @@
 
 from data_loading import load_csv, load_truth_hs_z, train_test_split
-from plotting import plot_log_reco_err, plot_err_vs_pt2
+from plotting import plot_log_reco_err, plot_err_vs_pt2, line_plot
+from helpers import get_efficiencies_vs_density
 from gan.gan_autoencoder import GanNetwork
 import numpy as np
 import keras
