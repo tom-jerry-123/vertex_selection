@@ -8,15 +8,16 @@ import matplotlib.pyplot as plt
 import numpy as np
 import math
 
-root_file = uproot.open('tt_hist-Rel21_19files.root')
-tree = root_file["EventTree"]
+root_file = uproot.open("C:/Users/jerry/Documents/Phys_Summer_Research/root_files/ttbar-full-data.root")
+# root_file = uproot.open("C:/Users/jerry/Documents/Phys_Summer_Research/root_files/VBF_hist-Rel21sample_199files.root")
+tree = root_file["EventTree;1"]
 
 # Get the branches of interest
 my_branches = tree.arrays(['truthvertex_z', 'track_prob', 'truthvertex_isHS','truthvertex_isPU','recovertex_isHS', 'recovertex_isPU', 'recovertex_sumPt2', 'recovertex_tracks_idx', 'recovertex_z', 'track_z0', 'track_status', 'track_qOverP', 'track_theta', 'track_phi'])
 
 # Define the event number and vertex ID to focus on
-event_num = 1799 #4147 #631
-vtxID =1  #1
+event_num = 6631 #4147 #631
+vtxID = 10  #1
 
 print("isHS",my_branches.recovertex_isHS[event_num][vtxID] )
 print("isPU",my_branches.recovertex_isPU[event_num][vtxID] )
@@ -132,7 +133,7 @@ plt.text(x_coord, y_coord, f"Reco z = {vtx_z:.2f}", weight='bold', fontsize=12)
 plt.text(x_coord, y_coord - 0.1, f"Truth z = {truth_z:.2f}", weight='bold', fontsize=12)
 plt.text(x_coord, y_coord - 0.2, f"Sum $p_T^2$ = {sumpt:.2f}", weight='bold', fontsize=12)
 
-#plt.text(x_coord, y_coord - 0.2, r"Sum $p_T^2$ = " + r"$\square$", weight='bold', fontsize=12)
+#plt.text(x_coord, y_coord - 0.2, r"Sum $p_T^2$ = " + r"$/square$", weight='bold', fontsize=12)
 
 # Plot the line for the recovertex_z values
 reco_vertices_z = [z for z, _ in reco_vertices]

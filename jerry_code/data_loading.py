@@ -77,3 +77,30 @@ def load_truth_hs_z(root_file_path, start, end):
         hs_z_coords.append(truth_z_array[i][0])
 
     return np.array(hs_z_coords)
+
+
+def train_test_split(X_data, y_data, split_idx_num=-1, remove_training_hs=True, truth_hs_data=None):
+    """
+    Different from load_train_test above in that it takes all the data (from input arrays X_data, y_data),
+    splits it into training and testing sets based on training events and testing events
+
+    Returns X_train (PU only), X_test, y_test
+    :return:
+    """
+    split_idxs = np.where(y_data == 1)[0]
+    N_events = len(split_idxs)
+    if split_idx_num < 0 or split_idx_num > N_events:
+        split_idx_num = N_events // 2
+    split_idx = split_idxs[split_idx_num]
+    X_test = X_data[split_idx:, :]
+    y_test = y_data[split_idx:]
+    X_train = X_data[:split_idx, :]
+    if remove_training_hs:
+        X_train = X_train[y_data[:split_idx] == 0]
+    if truth_hs_data is not None:
+        truth_hs_zs = truth_hs_data[:, 0]
+        end_e_num = X_test[-1, -1]
+        end_idx = np.where(truth_hs_data[:, 1] == end_e_num)[0][0] + 1
+        truth_hs_zs = truth_hs_zs[split_idx_num: end_idx]
+        return X_train, X_test, y_test, truth_hs_zs
+    return X_train, X_test, y_test
